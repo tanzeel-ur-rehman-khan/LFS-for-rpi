@@ -7,11 +7,13 @@ This repo aims to provide a step-by-step guide in order to build your own custom
 ## Prerequisites
 In order to build LFS, following are the prerequisites you need:
   1.  Desktop Linux machine (Ubuntu 22.04 LTS in my case)
-  2.  Micro SD Card and Card Reader (atleast 16 GB for learning phase : I'm currently using 32 GB SD card)
-  3.  Raspberry Pi 4 (Or atleast Raspberry Pi 3B : This tutorial will guide you to build a 64-bit Debian dist on RPI 4 but the same applies for RPI 3B)
+  2.  Micro SD Card and Card Reader (I'm currently using 32 GB SD card)
+  3.  Raspberry Pi 4 (This tutorial will guide you to build a 64-bit Debian dist on RPI 4 but the same applies for RPI 3B)
   Rest of the stuff is required after we prepare our SD card
   4.  LAN cable
   5.  USB-to-C/USB-to-B cable for RPI 4/RPI 3B respectively
   6.  Micro HDMI-to-HDMI/HDMI-to-HDMI cable for RPI 4/RPI 3B respectively
-  7.  Monitor with HDMI support (otherwise you may use a converter)
-  8.  Keyboard (Mouse is required only if you're willing to go for Desktop based enviroment but that will increase your minimum requirement as well : atleast RPI 4 with 8 GB and 32 GB of SD card)
+  7.  Monitor with HDMI support and Keyboard 
+## Installing VMware
+Virtual Machines are better than dual boot system when you have to switch between windows and linux machines
+  1.  
