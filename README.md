@@ -130,6 +130,22 @@ After connecting you Micro SD card to your VM, format previous partitions (if an
   ```
   ct-ng build
   ```
-  8.  
+  6.  For some users, there might be some 'retrieving tarball errors' ('zlib-1.2.12' for me, could be any tarball for you). 
+  <p align="center">
+<img src="tutorial-images/cross-4.PNG">
+</p>
+
+  A simple fix for that is to copy the exact version of required tarball from terminal and search for its tar file on internet (Make sure you download the exact same version). 
+  <p align="center">
+<img src="tutorial-images/cross-5.PNG">
+</p>
+
+  Once downloaded place it in ~/src DIR because crosstool downloads, stores and grabs these tarballs in ~/src DIR, Check the last tarball in Screenshot. (you can make new DIR named 'src' in $HOME) 
+  <p align="center">
+<img src="tutorial-images/cross-6.PNG">
+</p>
+
+  Also, this process might take 35-40 minutes 😅
+  
   
   
