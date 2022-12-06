@@ -87,11 +87,14 @@ After connecting you Micro SD card to your VM, format previous partitions (if an
 </p>
 
 ## Building Cross-Compiler Toolchain (CROSSTOOL-NG)
+
+Cross compilers are used to compile code for multiple platforms from one development host. Direct compilation on the target platform might be infeasible, for example on embedded systems with limited computing resources.
+
   1.  Install basic dependencies. Keep in mind there might be some dependencies which are not mentioned here at the time of verification of this github repo but might be needed when in future. You can install them easily using same method.
   ```
   sudo apt-get update
   sudo apt-get upgrade
-  sudo apt-get install make automake bison chrpath flex g++ git gperf gawk help2man libexpat1-dev libncurses5-dev libsdl1.2-dev libtool libtool-bin libtool-doc python2.7-dev texinfo debootstrap binfmt-support qemu-user-static
+  sudo apt-get install make automake bison chrpath flex g++ git gperf gawk help2man libexpat1-dev libncurses5-dev libsdl1.2-dev libtool libtool-bin libtool-doc python2.7-dev texinfo debootstrap binfmt-support qemu-user-static python-is-python3 python3-dev libssl-dev
   ```
   2.  Download Crosstool-NG
   ```
@@ -146,6 +149,34 @@ After connecting you Micro SD card to your VM, format previous partitions (if an
 </p>
 
   Also, this process might take 35-40 minutes 😅
-  
-  
-  
+  Once the process is complete, cross-compiler built for Rpi 4 is stored in ~/x-tools/aarch64-rpi4-linux-gnu
+
+## Custom Boot-Loader
+
+Bootloader is the first piece of firmware which gets executed once the Embedded System is turned-on or reset. The primary objective of the Bootloader is to initialise the Embedded System and provide control to the Application/RTOS. The other objective of the Bootloader might be to support the data loading feature.
+
+  1.  Git Clone u-boot boot-loader in $HOME DIR
+  ```
+  git clone git://git.denx.de/u-boot.git
+  cd u-boot
+  ```
+  2.  Configure and make u-boot
+  ```
+  export PATH=${HOME}/x-tools/aarch64-rpi4-linux-gnu/bin/:$PATH
+  export CROSS_COMPILE=aarch64-rpi4-linux-gnu-
+  make rpi_4_defconfig
+  make
+  ```
+  3.  Install u-boot in the boot partition (Change your username in following commands)
+  ```
+  sudo cp u-boot.bin /media/(username)/boot/
+  svn checkout https://github.com/raspberrypi/firmware/trunk/boot
+  sudo cp boot/{bootcode.bin,start4.elf} /media/(username)/boot/
+  cat << EOF > config.txt
+  enable_uart=1
+  arm_64bit=1
+  kernel=u-boot.bin
+  EOF
+  sudo mv config.txt /media/(username)/boot/
+```
+  5.  
