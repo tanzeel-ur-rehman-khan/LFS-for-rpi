@@ -94,7 +94,7 @@ Cross compilers are used to compile code for multiple platforms from one develop
   ```
   sudo apt-get update
   sudo apt-get upgrade
-  sudo apt-get install make automake bison chrpath flex g++ git gperf gawk help2man libexpat1-dev libncurses5-dev libsdl1.2-dev libtool libtool-bin libtool-doc python2.7-dev texinfo debootstrap binfmt-support qemu-user-static python-is-python3 python3-dev libssl-dev
+  sudo apt-get install make automake bison chrpath flex g++ git gperf gawk help2man libexpat1-dev libncurses5-dev libsdl1.2-dev libtool libtool-bin libtool-doc python2.7-dev texinfo debootstrap binfmt-support qemu-user-static python-is-python3 python3-dev libssl-dev subversion
   ```
   2.  Download Crosstool-NG
   ```
@@ -133,20 +133,22 @@ Cross compilers are used to compile code for multiple platforms from one develop
   ```
   ct-ng build
   ```
-  6.  For some users, there might be some 'retrieving tarball errors' ('zlib-1.2.12' for me, could be any tarball for you). 
-  <p align="center">
-<img src="tutorial-images/cross-4.PNG">
-</p>
-
-  A simple fix for that is to copy the exact version of required tarball from terminal and search for its tar file on internet (Make sure you download the exact same version). 
-  <p align="center">
-<img src="tutorial-images/cross-5.PNG">
-</p>
-
-  Once downloaded place it in ~/src DIR because crosstool downloads, stores and grabs these tarballs in ~/src DIR, Check the last tarball in Screenshot. (you can make new DIR named 'src' in $HOME) 
-  <p align="center">
-<img src="tutorial-images/cross-6.PNG">
-</p>
+  > __Warning__
+  > 
+  > For some users, there might be some 'retrieving tarball errors' ('zlib-1.2.12' for me, could be any tarball for you). 
+   > <p align="center">
+> <img src="tutorial-images/cross-4.PNG">
+> </p>
+>
+  > A simple fix for that is to copy the exact version of required tarball from terminal and search for its tar file on internet (Make sure you download the exact same version). 
+ > <p align="center">
+> <img src="tutorial-images/cross-5.PNG">
+> </p>
+>
+  > Once downloaded place it in ~/src DIR because crosstool downloads, stores and grabs these tarballs in ~/src DIR, Check the last tarball in Screenshot. (you can make new DIR named 'src' in $HOME) 
+>  <p align="center">
+> <img src="tutorial-images/cross-6.PNG">
+> </p>
 
   Also, this process might take 35-40 minutes 😅
   Once the process is complete, cross-compiler built for Rpi 4 is stored in ~/x-tools/aarch64-rpi4-linux-gnu
@@ -167,7 +169,9 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   make rpi_4_defconfig
   make
   ```
-  3.  Install u-boot in the boot partition (Change your username in following commands)
+  3.  Install u-boot in the boot partition 
+  > __Note__ 
+  > Change your username in following commands
   ```
   sudo cp u-boot.bin /media/(username)/boot/
   svn checkout https://github.com/raspberrypi/firmware/trunk/boot
@@ -177,6 +181,51 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   arm_64bit=1
   kernel=u-boot.bin
   EOF
-  sudo mv config.txt /media/(username)/boot/
+  ```
+  <p align="center">
+  <img src="tutorial-images/boot-1.PNG">
+  </p>
+  
+  ```
+  sudo cp config.txt /media/(username)/boot/
 ```
-  5.  
+  4.  Create Boot Script 
+  ```
+  cat << EOF > boot_cmd.txt
+  fatload mmc 0:1 \${kernel_addr_r} Image
+  setenv bootargs "console=serial0,115200 console=tty1 root=/dev/mmcblk0p2 rw rootwait init=/sbin/init"
+  booti \${kernel_addr_r} - \${fdt_addr}
+  EOF
+  ```
+  <p align="center">
+  <img src="tutorial-images/boot-2.PNG">
+  </p>
+  
+  ```
+	~/u-boot/tools/mkimage -A arm64 -O linux -T script -C none -d boot_cmd.txt boot.scr
+  ```
+  <p align="center">
+  <img src="tutorial-images/boot-3.PNG">
+  </p>
+  
+  ```
+ 	sudo cp boot.scr /media/(username)/boot/
+  ```
+  ## Kernel (rpi-5.19.y)
+  The Linux kernel is the main component of a Linux operating system (OS) and is the core interface between a computer's hardware and its processes. It communicates between the 2, managing resources as efficiently as possible.
+  1.  Download kernel rpi-5.19.y in $HOME DIR
+  ```
+  git clone --depth=1 -b rpi-5.19.y https://github.com/raspberrypi/linux.git
+  cd linux
+  ```
+  2.  Configure and build kernel
+  ```
+  make ARCH=arm64 CROSS_COMPILE=aarch64-rpi4-linux-gnu- bcm2711_defconfig
+  make -j$(nproc) ARCH=arm64 CROSS_COMPILE=aarch64-rpi4-linux-gnu-
+  ```
+  3.  Install kernel and Device Tree Blob (DTB) in the boot partition
+   ```
+  sudo cp arch/arm64/boot/Image /media/(username)/boot/
+  sudo cp arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b.dtb /media/(username)/boot/
+  ```
+  
