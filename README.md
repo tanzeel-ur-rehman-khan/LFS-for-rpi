@@ -211,8 +211,11 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   ```
  	sudo cp boot.scr /media/(username)/boot/
   ```
+  
   ## Kernel (rpi-5.19.y)
+  
   The Linux kernel is the main component of a Linux operating system (OS) and is the core interface between a computer's hardware and its processes. It communicates between the 2, managing resources as efficiently as possible.
+  
   1.  Download kernel rpi-5.19.y in $HOME DIR
   ```
   git clone --depth=1 -b rpi-5.19.y https://github.com/raspberrypi/linux.git
@@ -224,8 +227,95 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   make -j$(nproc) ARCH=arm64 CROSS_COMPILE=aarch64-rpi4-linux-gnu-
   ```
   3.  Install kernel and Device Tree Blob (DTB) in the boot partition
-   ```
+  ```
   sudo cp arch/arm64/boot/Image /media/(username)/boot/
   sudo cp arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b.dtb /media/(username)/boot/
   ```
   
+  ## Root File System (RootFS: Stretch-Debian 9)
+  
+  The root file system is the top of the hierarchical file tree. It contains the files and directories critical for system operation, including the device directory and programs for booting the system.
+  
+  1.  Build First Stage of Debian rootfs in $HOME DIR
+  ```
+  mkdir rootfs
+  sudo debootstrap --arch=arm64 --foreign stretch rootfs
+  ```
+  2.  Copy qemu (open-source emulator already installed in dependencies) and resolv.conf from host PC to guest
+  ```
+  sudo cp -av /usr/bin/qemu-aarch64-static ~/rootfs/usr/bin
+  sudo cp -av /run/systemd/resolve/stub-resolv.conf ~/debianFS/etc/resolv.conf
+  ```
+  3.  Install Kernel Modules and VmLinuz in rootfs
+  ```
+  cd linux
+  sudo make ARCH=arm64 modules_install INSTALL_MOD_PATH=~/rootfs
+  ```
+  > __Note__
+  > Before next command, change INSTALL_PATH in makefile in ~/linux DIR to /home/(username)/rootfs/boot/ 
+  ```
+  sudo make install ARCH=arm64
+  ```
+  4.  Chroot in rootfs and setup Debian 9 (second stage, basic libraries/plugins, users, fstab etc)
+  ```
+  sudo chroot rootfs
+  export LANG=C
+  /debootstrap/debootstrap --second-stage
+  nano /etc/apt/sources.list
+  ```
+  Replace this text with the following (Most of the links are commented out but could be used as per need)
+  > ###### Debian Main Repos
+  > # deb http://deb.debian.org/debian/ stable main contrib non-free
+  > # deb-src http://deb.debian.org/debian/ stable main contrib non-free
+  > 
+  > # deb http://deb.debian.org/debian/ stable-updates main contrib non-free
+  > # deb-src http://deb.debian.org/debian/ stable-updates main contrib non-free
+  > 
+  > # deb http://deb.debian.org/debian-security stable/updates main
+  > # deb-src http://deb.debian.org/debian-security stable/updates main
+  > 
+  > ### -----------------------------
+  > ###Reposit  rio (stretch) Base ###
+  > ### -----------------------------
+  > deb http://deb.debian.org/debian/ stretch main contrib non-free
+  > # deb-src http://deb.debian.org/debian/ stretch main contrib non-free
+  > 
+  > ### -----------------------------
+  > ###Reposit  rio (stretch) security.debian.org/ ###
+  > ### -----------------------------
+  > deb http://deb.debian.org/debian-security/ stretch/updates main contrib non-free
+  > # deb-src http://deb.debian.org/debian-security/ stretch/updates main contrib non-free
+  > 
+  > ### -----------------------------
+  > ###Reposit  rio (stretch) stretch-updates ###
+  > ### -----------------------------
+  > deb http://deb.debian.org/debian/ stretch-updates main contrib non-free
+  > # deb-src http://deb.debian.org/debian/ stretch-updates main contrib non-free
+  > 
+  > ### -----------------------------
+  > ###Reposit  rio (stretch) proposed-updates###
+  > ### -----------------------------
+  > # deb http://deb.debian.org/debian/ stretch-proposed-updates main contrib non-free
+  > # deb-src http://deb.debian.org/debian/ stretch-proposed-updates main contrib non-free
+  > 
+  > ### -----------------------------
+  > ###Reposit  rio (stretch) stretch-backports ###
+  > ### -----------------------------
+  > deb http://ftp.debian.org/debian stretch-backports main
+  
+  ```
+  apt-get update
+  apt-get install sudo ifupdown net-tools ethtool udev wireless-tools iputils-ping resolvconf wget apt-utils wpasupplicant network-manager dialog perl locales 
+  apt-get upgrade
+  echo RaspberryPi > /etc/hostname
+  echo 127.0.0.1 localhost > /etc/hosts
+  echo 127.0.1.1 RaspberryPi >> /etc/hosts
+  passwd root
+  Follow on screen instructions
+  locale-gen "en_US.UTF-8" 
+  nano /etc/fstab 
+  ```
+  Add the following text in this file
+  > /dev/mmcblk0p2	/	ext4	defaults,noatime	0	1 
+
+
