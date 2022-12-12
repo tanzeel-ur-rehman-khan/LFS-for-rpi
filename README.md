@@ -289,6 +289,9 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   nano /etc/fstab 
   ```
   Add the following text in this file
+  > __Note__
+  > The following command has Tabs and NOT Spaces!
+  
   ```
   /dev/mmcblk0p2	/	ext4	defaults,noatime	0	1 
   ```
