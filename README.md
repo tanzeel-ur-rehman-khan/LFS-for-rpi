@@ -18,3 +18,7 @@ In order to build LFS, following are the prerequisites you need:
   5.  USB-to-C/USB-to-B cable for RPI 4/RPI 3B respectively
   6.  Micro HDMI-to-HDMI/HDMI-to-HDMI cable for RPI 4/RPI 3B respectively
   7.  Monitor with HDMI support and Keyboard 
+
+  Following issues are addressed on this repo so far
+  
+  ### ![Custom configuring and building RPI-OS](Custom-OS-for-RPI4.md)
