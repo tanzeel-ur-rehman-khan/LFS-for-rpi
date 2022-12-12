@@ -21,4 +21,4 @@ In order to build LFS, following are the prerequisites you need:
 
   Following issues are addressed on this repo so far
   
-  ### [Custom configuring and building RPI-OS](Custom-OS-for-RPI4.md)
+  #### 1.  [Custom configuring and building RPI-OS](Custom-OS-for-RPI4.md)
