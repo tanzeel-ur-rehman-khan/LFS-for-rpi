@@ -193,7 +193,7 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   ```
   cat << EOF > boot_cmd.txt
   fatload mmc 0:1 \${kernel_addr_r} Image
-  setenv bootargs "console=serial0,115200 console=tty1 root=/dev/mmcblk0p2 rw rootwait init=/sbin/init"
+  setenv bootargs "console=serial0,115200 console=tty1 root=/dev/mmcblk0p2 rw rootwait quiet splash init=/sbin/init"
   booti \${kernel_addr_r} - \${fdt_addr}
   EOF
   ```
@@ -253,6 +253,10 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   ```
   > __Note__
   > Before next command, change INSTALL_PATH in makefile in ~/linux DIR to /home/(username)/rootfs/boot/ 
+  > <p align="center">
+  > <img src="tutorial-images/rootfs1.PNG">
+  > </p>
+  
   ```
   sudo make install ARCH=arm64
   ```
@@ -263,45 +267,14 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   /debootstrap/debootstrap --second-stage
   nano /etc/apt/sources.list
   ```
-  Replace this text with the following (Most of the links are commented out but could be used as per need)
-  > ###### Debian Main Repos
-  > # deb http://deb.debian.org/debian/ stable main contrib non-free
-  > # deb-src http://deb.debian.org/debian/ stable main contrib non-free
-  > 
-  > # deb http://deb.debian.org/debian/ stable-updates main contrib non-free
-  > # deb-src http://deb.debian.org/debian/ stable-updates main contrib non-free
-  > 
-  > # deb http://deb.debian.org/debian-security stable/updates main
-  > # deb-src http://deb.debian.org/debian-security stable/updates main
-  > 
-  > ### -----------------------------
-  > ###Reposit  rio (stretch) Base ###
-  > ### -----------------------------
-  > deb http://deb.debian.org/debian/ stretch main contrib non-free
-  > # deb-src http://deb.debian.org/debian/ stretch main contrib non-free
-  > 
-  > ### -----------------------------
-  > ###Reposit  rio (stretch) security.debian.org/ ###
-  > ### -----------------------------
-  > deb http://deb.debian.org/debian-security/ stretch/updates main contrib non-free
-  > # deb-src http://deb.debian.org/debian-security/ stretch/updates main contrib non-free
-  > 
-  > ### -----------------------------
-  > ###Reposit  rio (stretch) stretch-updates ###
-  > ### -----------------------------
-  > deb http://deb.debian.org/debian/ stretch-updates main contrib non-free
-  > # deb-src http://deb.debian.org/debian/ stretch-updates main contrib non-free
-  > 
-  > ### -----------------------------
-  > ###Reposit  rio (stretch) proposed-updates###
-  > ### -----------------------------
-  > # deb http://deb.debian.org/debian/ stretch-proposed-updates main contrib non-free
-  > # deb-src http://deb.debian.org/debian/ stretch-proposed-updates main contrib non-free
-  > 
-  > ### -----------------------------
-  > ###Reposit  rio (stretch) stretch-backports ###
-  > ### -----------------------------
-  > deb http://ftp.debian.org/debian stretch-backports main
+  Replace this text with the following
+  
+  ```
+  deb http://deb.debian.org/debian/ stretch main contrib non-free
+  deb http://deb.debian.org/debian-security/ stretch/updates main contrib non-free
+  deb http://deb.debian.org/debian/ stretch-updates main contrib non-free
+  deb http://ftp.debian.org/debian stretch-backports main
+  ```
   
   ```
   apt-get update
@@ -316,6 +289,7 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   nano /etc/fstab 
   ```
   Add the following text in this file
-  > /dev/mmcblk0p2	/	ext4	defaults,noatime	0	1 
-
+  ```
+  /dev/mmcblk0p2	/	ext4	defaults,noatime	0	1 
+  ```
 
