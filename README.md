@@ -11,7 +11,7 @@ This repo aims to provide a step-by-step guide in order to build your own custom
 ## Prerequisites
 In order to build LFS, following are the prerequisites you need:
   1.  Desktop Linux machine (Ubuntu 22.04.1 LTS in my case)
-  2.  Micro SD Card and Card Reader (I'm currently using 32 GB SD card)
+  2.  Micro SD Card and Card Reader (I'm currently using 64 GB SD card)
   3.  Raspberry Pi 4 (This tutorial will guide you to build a 64-bit Debian dist on RPI 4 but the same applies for RPI 3B)
   Rest of the stuff is required after we prepare our SD card
   4.  LAN cable
