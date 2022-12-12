@@ -1,3 +1,5 @@
+Our First step is to custom configure and build bootloader, kernel and Root File System (RootFS) for RPI 
+
 ## Installing VMware and Ubuntu Desktop
 Virtual Machines are better than dual boot system when you have to switch between windows and linux machines
   1.  Most updated VMware setup is available [here](https://www.vmware.com/latam/products/workstation-player/workstation-player-evaluation.html) and Ubuntu 22.04.1 LTS can be downloaded from [here](https://ubuntu.com/download/desktop).
