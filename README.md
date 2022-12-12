@@ -198,7 +198,7 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   EOF
   ```
   <p align="center">
-  <img src="tutorial-images/boot-2.PNG">
+  <img src="tutorial-images/boot-error.PNG">
   </p>
   
   ```
@@ -296,3 +296,5 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   /dev/mmcblk0p2	/	ext4	defaults,noatime	0	1 
   ```
 
+  Copy rootfs in you SD Card's Root DIR, plug-in in RPI, and login to use you fully custom built LFS ✌
+  
