@@ -247,9 +247,11 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   sudo chroot rootfs
   export LANG=C
   /debootstrap/debootstrap --second-stage
+  ```
+  ```
   nano /etc/apt/sources.list
   ```
-  Replace this text with the following
+  This command will open a file with some text written already. Replace this text with the following
   
   ```
   deb http://deb.debian.org/debian/ stretch main contrib non-free
@@ -268,6 +270,8 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   passwd root
   Follow on screen instructions
   locale-gen "en_US.UTF-8" 
+  ```
+  ```
   nano /etc/fstab 
   ```
   Add the following text in this file
