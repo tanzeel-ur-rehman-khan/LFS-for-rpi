@@ -205,6 +205,8 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   ```
   2.  Configure and build kernel
   ```
+  export PATH=${HOME}/x-tools/aarch64-rpi4-linux-gnu/bin/:$PATH
+  export CROSS_COMPILE=aarch64-rpi4-linux-gnu-
   make ARCH=arm64 CROSS_COMPILE=aarch64-rpi4-linux-gnu- bcm2711_defconfig
   make -j$(nproc) ARCH=arm64 CROSS_COMPILE=aarch64-rpi4-linux-gnu-
   ```
