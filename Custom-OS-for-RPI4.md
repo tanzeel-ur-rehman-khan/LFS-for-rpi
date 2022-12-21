@@ -228,7 +228,7 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   2.  Copy qemu (open-source emulator already installed in dependencies) and resolv.conf from host PC to guest
   ```
   sudo cp -av /usr/bin/qemu-aarch64-static ~/rootfs/usr/bin
-  sudo cp -av /run/systemd/resolve/stub-resolv.conf ~/debianFS/etc/resolv.conf
+  sudo cp -av /run/systemd/resolve/stub-resolv.conf ~/rootfs/etc/resolv.conf
   ```
   3.  Install Kernel Modules and VmLinuz in rootfs
   ```
