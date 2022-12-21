@@ -270,7 +270,6 @@ Bootloader is the first piece of firmware which gets executed once the Embedded 
   echo 127.0.0.1 localhost > /etc/hosts
   echo 127.0.1.1 RaspberryPi >> /etc/hosts
   passwd root
-  Follow on screen instructions
   locale-gen "en_US.UTF-8" 
   ```
   ```
