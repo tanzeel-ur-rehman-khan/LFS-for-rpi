@@ -32,4 +32,31 @@ It will ask you for an account, I already have one (non-commercial one, its comp
 ```
 sudo apt-get install qtcreator
 ```
-6.  
+6.  Build QT for remote device
+```
+cd ~/qt-development
+wget https://download.qt.io/official_releases/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz
+tar xvf qt-everywhere-src-5.15.0.tar.xz
+```
+Create new file using gedit in same DIR under name "build-all" and paste the following 
+```
+#/bin/bash
+
+cd qt-everywhere-src-5.15.0
+echo yes | ./configure -opensource -xplatform linux-aarch64-gnu-g++ -no-opengl
+
+gmake && gmake install
+```
+Before we run "build-all" we need to make some changes in qt-5.15.0 source files. I have provided the changes in form of 2-line pairs down below. first line to be pasted in terminal while second line is to be added in file which previous command will open in text editor. (These are include lines so will be added where rest of the include lines are written)
+```
+gedit qt-everywhere-src-5.15.0/qtbase/src/corelib/global/qfloat16.h 
+#include <limits>
+
+gedit qt-everywhere-src-5.15.0/qtbase/src/corelib/text/qbytearraymatcher.h 
+#include <limits>
+```
+Now run the file using
+```
+./build-all
+```
+After this the QT 5.15.0 will be built and installed in /usr/local and can be used in QTcreator
