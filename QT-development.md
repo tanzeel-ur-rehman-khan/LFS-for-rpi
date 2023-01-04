@@ -54,6 +54,9 @@ gedit qt-everywhere-src-5.15.0/qtbase/src/corelib/global/qfloat16.h
 
 gedit qt-everywhere-src-5.15.0/qtbase/src/corelib/text/qbytearraymatcher.h 
 #include <limits>
+
+gedit qt-everywhere-src-5.15.0/qtbase/src/corelib/tools/qoffsetstringarray_p.h 
+#include <limits>
 ```
 Now run the file using
 ```
