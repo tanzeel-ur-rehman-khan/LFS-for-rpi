@@ -282,7 +282,7 @@ int main()
 ```
 gcc -o app app.c
 ```
-7.  Transfer the a.out file to RPI /home DIR as well
+7.  Transfer the app file to RPI /home DIR as well
 8.  Setup LED circuit as follows
  <p align="center">
 <img src="tutorial-images/qt-3.PNG">
