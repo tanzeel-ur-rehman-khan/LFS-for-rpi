@@ -63,6 +63,7 @@ gedit qt-everywhere-src-5.15.0/qtdeclarative/src/qmldebug/qqmlprofilerevent_p.h
 ```
 ```
 sudo rm -r qt-everywhere-src-5.15.0/qtlocation
+sudo rm -r qt-everywhere-src-5.15.0/qtwebengine
 ```
 Now run the file using
 ```
