@@ -45,7 +45,7 @@ Create new file using gedit in same DIR under name "build-all" and paste the fol
 cd qt-everywhere-src-5.15.0
 echo yes | ./configure -opensource -xplatform linux-aarch64-gnu-g++ -no-opengl
 
-gmake && gmake install
+sudo gmake && sudo gmake install
 ```
 Before we run "build-all" we need to make some changes in qt-5.15.0 source files. I have provided the changes in form of 2-line pairs down below. first line to be pasted in terminal while second line is to be added in file which previous command will open in text editor. (These are include lines so will be added where rest of the include lines are written)
 ```
