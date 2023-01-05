@@ -61,6 +61,9 @@ gedit qt-everywhere-src-5.15.0/qtbase/src/corelib/tools/qoffsetstringarray_p.h
 gedit qt-everywhere-src-5.15.0/qtdeclarative/src/qmldebug/qqmlprofilerevent_p.h 
 #include <limits>
 ```
+```
+sudo rm -r qt-everywhere-src-5.15.0/qtlocation
+```
 Now run the file using
 ```
 ./build-all
