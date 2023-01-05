@@ -147,7 +147,7 @@ There you have it, your first basic device driver for Raspberry Pi 4 ✌
 
 ## Advanced Device Drivers
 
-Let's now have a look on how we can build device drivers for hardware devices like a single LED and LED matrix.
+Let's now have a look on how we can build device drivers for hardware devices like a single LED.
 
 ### IOCTL based LED driver
 
