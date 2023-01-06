@@ -233,18 +233,18 @@ MODULE_LICENSE("GPL");
 MODULE_AUTHOR("EE522");
 MODULE_DESCRIPTION("Simple Linux device driver (IOCTL)");
 ```
-2.  Build driver 
+2.  Make changes in makefile accordingly and Build driver
 ```
 sudo make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C ~/linux M=~/drivers modules
 ```
-3.  Copy 'hello_world.ko' file to /home DIR in RPI RootFS (Change Username to yours in the following command)
+3.  Copy 'led.ko' file to /home DIR in RPI RootFS (Change Username to yours in the following command)
 ```
-sudo cp hello_world.ko /media/(username)/root/home
+sudo cp led.ko /media/(username)/root/home
 sync
 ```
 4.  Install driver in RPI using the same commands we used for host PC
 ```
-sudo insmod hello_world.ko
+sudo insmod led.ko
 ```
 5.  We need to control the driver through a USER application. For this, create a C file and paste the following code
 ```
@@ -263,7 +263,7 @@ int main()
         int32_t value, number;
  
         printf("\nOpening Driver\n");
-        fd = open("/dev/etx_device", O_RDWR);
+        fd = open("/dev/led", O_RDWR);
         if(fd < 0) {
                 printf("Cannot open device file...\n");
                 return 0;
@@ -288,8 +288,356 @@ gcc -o app app.c
 <img src="tutorial-images/qt-3.PNG">
 </p>
   
-9.  Run the a.out file as follows
+9.  Run the app file as follows
 ```
 ./app
 ```
 10. Based on your input, the LED will turn ON or OFF 
+
+
+###  LED Matrix Driver
+
+1.  Create a new file named "ledmatrix.c" and paste the following code in it
+```
+#include <linux/kernel.h>
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/kdev_t.h>
+#include <linux/fs.h>
+#include <linux/cdev.h>
+#include <linux/device.h>
+#include<linux/slab.h>                 
+#include<linux/uaccess.h>           
+#include <linux/ioctl.h>
+#include <linux/miscdevice.h>
+#include <linux/gpio.h>
+
+#define DEVICE_NAME "led"
+int32_t value = 0;
+
+static long     etx_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
+
+static struct file_operations fops =
+{
+        .owner          = THIS_MODULE,
+        .unlocked_ioctl = etx_ioctl,
+};
+
+static struct miscdevice misc = {
+	.minor 	= MISC_DYNAMIC_MINOR,
+	.name 	= DEVICE_NAME,
+	.fops 	= &fops,
+};
+
+static long etx_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+{
+               
+        switch(cmd) {
+                case 0:
+                        if( copy_from_user(&value ,(int32_t*) arg, sizeof(value)) )
+                        {
+                                pr_err("Data Write : Err!\n");
+                        }
+  			gpio_set_value(6,value%2);
+         		value = value/2;
+         		gpio_set_value(13,value%2);
+         		value = value/2;
+         		gpio_set_value(19,value%2);
+         		value = value/2;
+         		gpio_set_value(26,value%2);
+         		
+         		gpio_set_value(21,0);
+         		gpio_set_value(20,0);
+         		gpio_set_value(16,0);
+                        break;
+                case 1:
+                        if( copy_from_user(&value ,(int32_t*) arg, sizeof(value)) )
+                        {
+                                pr_err("Data Write : Err!\n");
+                        }
+  			gpio_set_value(6,value%2);
+         		value = value/2;
+         		gpio_set_value(13,value%2);
+         		value = value/2;
+         		gpio_set_value(19,value%2);
+         		value = value/2;
+         		gpio_set_value(26,value%2);
+         		
+         		gpio_set_value(21,1);
+         		gpio_set_value(20,0);
+         		gpio_set_value(16,0);
+                        break;
+                case 2:
+                        if( copy_from_user(&value ,(int32_t*) arg, sizeof(value)) )
+                        {
+                                pr_err("Data Write : Err!\n");
+                        }
+  			gpio_set_value(6,value%2);
+         		value = value/2;
+         		gpio_set_value(13,value%2);
+         		value = value/2;
+         		gpio_set_value(19,value%2);
+         		value = value/2;
+         		gpio_set_value(26,value%2);
+         		
+         		gpio_set_value(21,0);
+         		gpio_set_value(20,1);
+         		gpio_set_value(16,0);
+                        break;
+                case 3:
+                        if( copy_from_user(&value ,(int32_t*) arg, sizeof(value)) )
+                        {
+                                pr_err("Data Write : Err!\n");
+                        }
+  			gpio_set_value(6,value%2);
+         		value = value/2;
+         		gpio_set_value(13,value%2);
+         		value = value/2;
+         		gpio_set_value(19,value%2);
+         		value = value/2;
+         		gpio_set_value(26,value%2);
+         		
+         		gpio_set_value(21,1);
+         		gpio_set_value(20,1);
+         		gpio_set_value(16,0);
+                        break;
+                case 4:
+                        if( copy_from_user(&value ,(int32_t*) arg, sizeof(value)) )
+                        {
+                                pr_err("Data Write : Err!\n");
+                        }
+  			gpio_set_value(6,value%2);
+         		value = value/2;
+         		gpio_set_value(13,value%2);
+         		value = value/2;
+         		gpio_set_value(19,value%2);
+         		value = value/2;
+         		gpio_set_value(26,value%2);
+         		
+         		gpio_set_value(21,0);
+         		gpio_set_value(20,0);
+         		gpio_set_value(16,1);
+                        break;
+                case 5:
+                        if( copy_from_user(&value ,(int32_t*) arg, sizeof(value)) )
+                        {
+                                pr_err("Data Write : Err!\n");
+                        }
+  			gpio_set_value(6,value%2);
+         		value = value/2;
+         		gpio_set_value(13,value%2);
+         		value = value/2;
+         		gpio_set_value(19,value%2);
+         		value = value/2;
+         		gpio_set_value(26,value%2);
+         		
+         		gpio_set_value(21,1);
+         		gpio_set_value(20,0);
+         		gpio_set_value(16,1);
+                        break;
+                case 6:
+                        if( copy_from_user(&value ,(int32_t*) arg, sizeof(value)) )
+                        {
+                                pr_err("Data Write : Err!\n");
+                        }
+  			gpio_set_value(6,value%2);
+         		value = value/2;
+         		gpio_set_value(13,value%2);
+         		value = value/2;
+         		gpio_set_value(19,value%2);
+         		value = value/2;
+         		gpio_set_value(26,value%2);
+         		
+         		gpio_set_value(21,0);
+         		gpio_set_value(20,1);
+         		gpio_set_value(16,1);
+                        break;
+                case 7:
+                        if( copy_from_user(&value ,(int32_t*) arg, sizeof(value)) )
+                        {
+                                pr_err("Data Write : Err!\n");
+                        }
+  			gpio_set_value(6,value%2);
+         		value = value/2;
+         		gpio_set_value(13,value%2);
+         		value = value/2;
+         		gpio_set_value(19,value%2);
+         		value = value/2;
+         		gpio_set_value(26,value%2);
+         		
+         		gpio_set_value(21,1);
+         		gpio_set_value(20,1);
+         		gpio_set_value(16,1);
+                        break;
+                
+                default:
+                        if( copy_from_user(&value ,(int32_t*) arg, sizeof(value)) )
+                        {
+                                pr_err("Data Write : Err!\n");
+                        }
+  			gpio_set_value(6,value%2);
+         		value = value/2;
+         		gpio_set_value(13,value%2);
+         		value = value/2;
+         		gpio_set_value(19,value%2);
+         		value = value/2;
+         		gpio_set_value(26,value%2);
+         		
+         		gpio_set_value(21,0);
+         		gpio_set_value(20,1);
+         		gpio_set_value(16,0);
+                        break;
+        }
+        return 0;
+}
+ 
+static int __init etx_driver_init(void)
+{
+	int ret;
+	//gpio reqs
+	{
+	if(gpio_is_valid(26) == false)
+    		pr_err("GPIO %d is not valid\n", 26);
+  	
+  	if(gpio_request(26,"GPIO_26") < 0)
+    		pr_err("ERROR: GPIO %d request\n", 26);
+
+	if(gpio_is_valid(19) == false)
+    		pr_err("GPIO %d is not valid\n", 19);
+  	
+  	if(gpio_request(19,"GPIO_19") < 0)
+    		pr_err("ERROR: GPIO %d request\n", 19);
+    		
+	if(gpio_is_valid(13) == false)
+    		pr_err("GPIO %d is not valid\n", 13);
+  	
+  	if(gpio_request(13,"GPIO_13") < 0)
+    		pr_err("ERROR: GPIO %d request\n", 13);
+    		
+	if(gpio_is_valid(6) == false)
+    		pr_err("GPIO %d is not valid\n", 6);
+  	
+  	if(gpio_request(6,"GPIO_6") < 0)
+    		pr_err("ERROR: GPIO %d request\n", 6);
+    		
+	if(gpio_is_valid(16) == false)
+    		pr_err("GPIO %d is not valid\n", 16);
+  	
+  	if(gpio_request(16,"GPIO_16") < 0)
+    		pr_err("ERROR: GPIO %d request\n", 16);
+    		
+	if(gpio_is_valid(20) == false)
+    		pr_err("GPIO %d is not valid\n", 20);
+  	
+  	if(gpio_request(20,"GPIO_20") < 0)
+    		pr_err("ERROR: GPIO %d request\n", 20);
+    		
+	if(gpio_is_valid(21) == false)
+    		pr_err("GPIO %d is not valid\n", 21);
+  	
+  	if(gpio_request(21,"GPIO_21") < 0)
+    		pr_err("ERROR: GPIO %d request\n", 21);
+
+  	
+  	//gpio initilizations
+  	gpio_direction_output(26, 0);
+  	gpio_direction_output(19, 0);
+  	gpio_direction_output(13, 0);
+  	gpio_direction_output(6, 0);
+  	gpio_direction_output(16, 0);
+  	gpio_direction_output(20, 0);
+  	gpio_direction_output(21, 0);
+  	}
+        ret = misc_register(&misc);
+        pr_info("Device Driver Insert...Done!!!\n");
+        return ret;
+}
+
+static void __exit etx_driver_exit(void)
+{
+        misc_deregister(&misc);
+        pr_info("Device Driver Remove...Done!!!\n");
+}
+ 
+module_init(etx_driver_init);
+module_exit(etx_driver_exit);
+ 
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("EE522");
+MODULE_DESCRIPTION("LED matrix driver (IOCTL)");
+```
+2.  Create a new file named "matrix_app.c" and paste the following code in it
+```
+
+/***************************************************************************//**
+*  \file       test_app.c
+*
+*  \details    Userspace application to test the Device driver
+*
+*  \author     EmbeTronicX
+*
+*  \Tested with Linux raspberrypi 5.10.27-v7l-embetronicx-custom+
+*
+*******************************************************************************/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include<sys/ioctl.h>
+ 
+int main()
+{
+        int fd;
+        int32_t value, number;
+	unsigned int col;
+ 
+        printf("\nOpening Driver\n");
+        fd = open("/dev/ledmatrix", O_RDWR);
+        if(fd < 0) {
+                printf("Cannot open device file...\n");
+                return 0;
+        }
+ 
+      printf("Enter row\n");
+      scanf("%d",&value);
+      printf("Enter Col\n");
+      scanf("%d",&col);
+        
+      ioctl(fd, col, (int32_t*) &value); 
+
+        printf("Closing Driver\n");
+        close(fd);
+}
+
+```
+3.  Make changes in makefile accordingly and Build driver
+```
+sudo make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C ~/linux M=~/drivers modules
+```
+4.  Copy 'ledmatrix.ko' file to /home DIR in RPI RootFS (Change Username to yours in the following command)
+```
+sudo cp ledmatrix.ko /media/(username)/root/home
+sync
+```
+5.  Install driver in RPI using the same commands we used for host PC
+```
+sudo insmod ledmatrix.ko
+```
+6.  Build the matrix_app.c using 
+```
+gcc -o matrix_app matrix_app.c
+```
+7.  Transfer the app file to RPI /home DIR as well
+8.  Setup LED circuit as follows
+ <p align="center">
+<img src="tutorial-images/matrix.png">
+</p>
+  
+9.  Run the matrix_app file as follows
+```
+./matrix_app
+```
+10. Based on your input, the corresponding LED will turn ON on LED matrix
