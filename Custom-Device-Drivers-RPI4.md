@@ -568,17 +568,6 @@ MODULE_DESCRIPTION("LED matrix driver (IOCTL)");
 ```
 2.  Create a new file named "matrix_app.c" and paste the following code in it
 ```
-
-/***************************************************************************//**
-*  \file       test_app.c
-*
-*  \details    Userspace application to test the Device driver
-*
-*  \author     EmbeTronicX
-*
-*  \Tested with Linux raspberrypi 5.10.27-v7l-embetronicx-custom+
-*
-*******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
